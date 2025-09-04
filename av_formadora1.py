@@ -89,19 +89,20 @@ def exibindo_relatorio():
    print(f"------------------------------|    TOTAL    |--------------------------------")
    print(f"Total final a pagar: R${total_final:.2f}")
 
-#5)Variáveis auxiliares:
-total_bruto=sum(subtotal_cada)
-forma_pagamento = registrar_forma_pagamento()
-desconto=calcular_desconto(total_bruto,forma_pagamento)
-valor_descontado=desconto
-total_final=(total_bruto) - (desconto)
-
 #SAÍDA DE DADOS
 #1)#Acompanhando funcionamento:
 print("Os produtos registrados foram:" ,registrar_produto(qntd_produtos_informados))
 print("O valor de cada unidade dos produtos registrados, em R$, é: ",registrar_valor_unidade(qntd_produtos_informados))
 print("A quantidade de unidades por produto é:" ,registrar_qntd_cada(qntd_produtos_informados))
 print("O subtotal de cada produto (quantidade de unidades x preço unidade), em R$, é: ",calcular_subtotal())
+
+#1.5)Variáveis auxiliares:
+total_bruto=sum(subtotal_cada)
+forma_pagamento = registrar_forma_pagamento()
+desconto=calcular_desconto(total_bruto,forma_pagamento)
+valor_descontado=desconto
+total_final=(total_bruto) - (desconto)
+
 print("O valor total (bruto) da compra, em R$, é: ", f"{total_bruto:.2f}")
 print("O valor total (com desconto), em R$, é:" ,f"{desconto:.2f}")
 
