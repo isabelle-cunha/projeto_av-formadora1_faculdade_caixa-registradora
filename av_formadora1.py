@@ -1,27 +1,6 @@
-#perguntar quantos produtos serão registrados [x]
-#para cada produto,solicitar: nome do produto, preço unitario e quantidade comprada. [x]
-#calcular o subtotal de cada produto (preço x quantidade)[x]
-#somar ao total geral da compra [x]
-#peguntar a forma de pagamento: 1 (a vista), 2(cartão de credito)[x]
+#Simulador de caixa registradora
 
-#aplicar descontos no total geral conforme: 
-#total acima de 200 reais a vista (15% de desconto) [x]
-#total entre 100reais e 200reais a vista (10% de desconto) [x]
-#cartão de credito (sem desconto)[x]
-
-#exibir relatório final contendo:
-#lista dos produtos (nome,qntd,preço unitário,subtotal)[x]
-#total antes do desconto
-#valor do desconto aplicado
-#valor total final a pagar
-
-#requisitos mínimos:
-#usar laço de repetição para registrar os produtos[x]
-#uso de variáveis para controle do total e desconto[x]
-#uso de estrutura condicional para aplicação das regras[x]
-#saída formatada e clara.[x]
-
-#Entrada de dados
+#ENTRADA DE DADOS:
 while True:
     qntd_produtos_informados = int(input("Informe, com números, quantos produtos serão registrados: "))
     if qntd_produtos_informados < 1:
@@ -29,13 +8,14 @@ while True:
     else:
         break
 
-
+#listas
 lista_produtos=[]
 valores_produtos=[]
-qntd_produtos=[]
+qntd_unidades=[]
 subtotal_cada=[]
 
-#Processamento  
+#PROCESSAMENTO:
+#1)Registros
 def registrar_produto(qntd_produtos_informados):
     for n_produtos in range(qntd_produtos_informados):
         nome_produto=input(f"Digite o nome do produto {n_produtos} que deseja registrar: ")
@@ -51,65 +31,79 @@ def registrar_valor_unidade(qntd_produtos_informados):
 def registrar_qntd_cada(qntd_produtos_informados):
     for i in range(qntd_produtos_informados):
         qntd_cada = int(input(f"Digite a quantidade de unidades de {lista_produtos [i]}: "))
-        qntd_produtos.append(qntd_cada)
-    return qntd_produtos
+        qntd_unidades.append(qntd_cada)
+    return qntd_unidades
 
 def calcular_subtotal():
-    for i in range(len(qntd_produtos)):
-        subtotal= valores_produtos[i] * qntd_produtos[i]
+    for i in range(len(qntd_unidades)):
+        subtotal= valores_produtos[i] * qntd_unidades[i]
         subtotal_cada.append(subtotal)
     return subtotal_cada
 
-def registrar_subtotal(subtotal_cada):
-    valor_bruto=float(0)
-    for i in range(len(subtotal_cada)):
-        valor_bruto = valor_bruto + (subtotal_cada[i])
-        #python f'{var:.2f}'= javascript var.toFixed(2)
-    return f'{valor_bruto:.2f}'
-total_bruto=registrar_subtotal(subtotal_cada)
-
-#Definindo forma de pagamento:
+#2)Definindo forma de pagamento:
 def registrar_forma_pagamento():
     while True:
         forma_pagamento=int(input("Qual a forma de pagamento? Digite 1 para pagamento à vista e 2 para cartão de crédito: "))
         if forma_pagamento == 1:
-            f_pagamento='à vista'
-            print('Forma de pagamento:' ,f_pagamento)
-            break
+            print("Pagamento à vista.")
+            return forma_pagamento
         elif forma_pagamento == 2:
-            f_pagamento='cartão de crédito'
-            print('Forma de pagamento:' ,f_pagamento)
-            break
+            print("Pagamento no crédito.")
+            return forma_pagamento
         else:
-            print("Forma de pagamento inválida.")
-    return f_pagamento
+            print("Forma de pagamento inválida! Tente novamente.")
 
-#Descontos:
-
-pagamento = registrar_forma_pagamento() #var_aux
-
-def calcular_desconto(total_bruto):
-    desconto=float(0)
-    if pagamento=='à vista' and total_bruto>200:
-        numerador_p=15
+#3)Descontos:
+def calcular_desconto(total_bruto,forma_pagamento):
+    desconto=float()
+    if forma_pagamento==1 and total_bruto>200:
+        numerador_p=int(15)
         print("Você teve desconto de 15%!")
         desconto= total_bruto * (numerador_p/100)
-    elif pagamento=='à vista' and (total_bruto>=100 and total_bruto<=200):
+        return desconto
+    elif forma_pagamento==1 and (total_bruto>=100 and total_bruto<=200):
         numerador_p=10
         print("Você teve desconto de 10%!")
         desconto= total_bruto * (numerador_p/100)
+        return desconto
     else:
-        desconto = 0
         print("Você não teve desconto!")
-    return f'{desconto:.2f}'
+        return desconto
+    
+#4)Relatório Final
+def exibindo_relatorio():
+   print("==============================|     NOTINHA     |==============================")
+   print("Produtos:")
+   for i in range(len(lista_produtos)):
+       print(f"{lista_produtos[i]} -> Qntd.Unidades: {qntd_unidades[i]} x R$ {valores_produtos[i]:.2f} = R$ {subtotal_cada[i]:.2f}")
+   print("-------------------------------------------------------------------------------")
+   print("Forma de pagamento:")
+   if forma_pagamento == 1:
+       print("Pagamento à vista.")
+   else:
+       print("Pagamento no crédito.")
+   print("-------------------------------------------------------------------------------")
+   print(f"Total antes do desconto: R$ {total_bruto:.2f}")
+   print(f"Valor total com desconto: R${ total_final:.2f}")
+   print(f"Valor descontado: R${desconto:.2f}")
+   print(f"------------------------------|    TOTAL    |--------------------------------")
+   print(f"Total final a pagar: R${total_final:.2f}")
 
-#var_aux
-desconto_registrado=calcular_desconto()
+#5)Variáveis auxiliares:
+total_bruto=sum(subtotal_cada)
+forma_pagamento = registrar_forma_pagamento()
+desconto=calcular_desconto(total_bruto,forma_pagamento)
+valor_descontado=desconto
+total_final=(total_bruto) - (desconto)
 
-#Saída de dados
+#SAÍDA DE DADOS
+#1)#Acompanhando funcionamento:
 print("Os produtos registrados foram:" ,registrar_produto(qntd_produtos_informados))
-print("O valor de cada unidade dos produtos registrados é: R$",registrar_valor_unidade(qntd_produtos_informados))
+print("O valor de cada unidade dos produtos registrados, em R$, é: ",registrar_valor_unidade(qntd_produtos_informados))
 print("A quantidade de unidades por produto é:" ,registrar_qntd_cada(qntd_produtos_informados))
-print("O subtotal de cada produto (quantidade de unidades x preço unidade) é: R$",calcular_subtotal())
-print("O valor total bruto da compra é: R$",total_bruto)
-print("O valor total com desconto é: R$",desconto_registrado)
+print("O subtotal de cada produto (quantidade de unidades x preço unidade), em R$, é: ",calcular_subtotal())
+print("O valor total (bruto) da compra, em R$, é: ", f"{total_bruto:.2f}")
+print("O valor total (com desconto), em R$, é:" ,f"{desconto:.2f}")
+
+#2)Saída da notinha:
+exibindo_relatorio()
